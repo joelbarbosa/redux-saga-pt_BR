@@ -6,7 +6,8 @@
 [![OpenCollective](https://opencollective.com/redux-saga/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/redux-saga/sponsors/badge.svg)](#sponsors)
 
-`redux-saga` is a library that aims to make side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) in React/Redux applications easier and better.
+`redux-saga` é uma lib que visa fazer side effects(efeitos colaterais) (i.e. coisas assincronas como data fetching e coisas impuras como acessar o cache do browser) em aplicações React/Redux mais fácil e melhor.
+
 
 O modelo mental é que uma saga é como uma thread separada em sua aplicação que é unicamente responsável por side effects. `redux-saga` é um redux middleware, que significa que essa thread pode ser estartada, pausada e cancelada na aplicação principal com normais redux actions, ela tem acesso a todo o state(estado) da aplicação redux e pode também dispatch(dispachar) ações.
 
