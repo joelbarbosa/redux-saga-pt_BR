@@ -15,7 +15,7 @@ O modelo mental é que uma saga é como uma thread separada em sua aplicação q
 Saga usa uma feature(característica) do ES6 chamada Generators para fazer fazer fluxos assincronos fáceis de ler, escrever e testar. *(Se você não está familirizada com elas [Aqui tem alguns links introdutórios](https://redux-saga.js.org/docs/ExternalResources.html))* Para fazê-los, fluxos assincronos veja como o padrão assincrono JavaScript code. (algo como `async`/`await`, mas generators tem coisas mais incríveis que nós precisamos)
 
 
-Talvez voxê já tenha usado `redux-thunk` para lidar com sua busca de dados. Contrários ao redux thunk, você não acaba em callback hell, você pode testar fácilmente seus fluxos assincronos e suas actions continuam puras.
+Talvez você já tenha usado `redux-thunk` para lidar com sua busca de dados. Contrários ao redux thunk, você não acaba em callback hell, você pode testar fácilmente seus fluxos assincronos e suas actions continuam puras.
 
 # Iniciando
 
@@ -34,7 +34,7 @@ Alternativamente, você pode usar o fornecido UMD build diretamente no `<script>
 
 ## Exemplo Usando
 
-Supomos que temos uma UI para buscar alguns dados dos usuários de um servidor remoto quando um butão é clicado. ( Breve resumo, iremos mostrar apenas ações disparados no código)
+Supomos que temos uma UI para buscar alguns dados dos usuários de um servidor remoto quando um botão é clicado. ( Breve resumo, iremos mostrar apenas ações disparados no código)
 
 ```javascript
 class UserComponent extends React.Component {
@@ -117,7 +117,7 @@ sagaMiddleware.run(mySaga)
 - [Conceitos Avançados](https://redux-saga.js.org/docs/advanced/index.html)
 - [Recipes](https://redux-saga.js.org/docs/recipes/index.html)
 - [Recursos Externos](https://redux-saga.js.org/docs/ExternalResources.html)
-- [Suluções de Problemas](https://redux-saga.js.org/docs/Troubleshooting.html)
+- [Soluções de Problemas](https://redux-saga.js.org/docs/Troubleshooting.html)
 - [Glossário](https://redux-saga.js.org/docs/Glossary.html)
 - [Refência da API](https://redux-saga.js.org/docs/api/index.html)
 
@@ -130,22 +130,22 @@ sagaMiddleware.run(mySaga)
 - [Russo](https://github.com/redux-saga/redux-saga/blob/master/README_ru.md)
 - [Português](https://github.com/redux-saga/redux-saga/blob/master/README_ru.md)
 
-# Usando umd build No Browser
+# Usando a build umd no browser
 
-There is also a **umd** build of `redux-saga` available in the `dist/` folder. When using the umd build `redux-saga` is available as `ReduxSaga` in the window object. This enables you to create Saga middleware without using ES6 `import` sytnax like this:
+Exibe também uma build **umd** do `redux-saga` disponível no diretório `dist/`. Ao usar a build do umd `redux-saga` está disponível como `ReduxSaga` no objeto window. Isso permite que você crie o middleware Saga sem usar a sintaxe ES6 `import`, assim:
 
 ```javascript
 var sagaMiddleware = ReduxSaga.default()
 ```
 
-The umd version is useful if you don't use Webpack or Browserify. You can access it directly from [unpkg](https://unpkg.com/).
+A versão umd é útil caso você não utilize Webpack ou Browserify. Você pode acessá-la diretamente através do [unpkg](https://unpkg.com/).
 
-The following builds are available:
+As seguintes builds estão disponíveis:
 
 - [https://unpkg.com/redux-saga/dist/redux-saga.js](https://unpkg.com/redux-saga/dist/redux-saga.js)
 - [https://unpkg.com/redux-saga/dist/redux-saga.min.js](https://unpkg.com/redux-saga/dist/redux-saga.min.js)
 
-**Important!** If the browser you are targeting doesn't support *ES2015 generators*, you must provide a valid polyfill, such as [the one provided by `babel`](https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js). The polyfill must be imported before **redux-saga**:
+**Importante!** Se o browser que você está trabalhando não suporta os *ES2015 generators*, você deve fornecer um polyfill válido, como o [fornecido pelo `babel`](https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js). O polyfill deve ser importado antes do **redux-saga**:
 
 ```javascript
 import 'babel-polyfill'
@@ -153,7 +153,7 @@ import 'babel-polyfill'
 import sagaMiddleware from 'redux-saga'
 ```
 
-# Building examples from sources
+# Construindo exemplos a partir do código fonte
 
 ```sh
 $ git clone https://github.com/redux-saga/redux-saga.git
@@ -162,23 +162,23 @@ $ npm install
 $ npm test
 ```
 
-Below are the examples ported (so far) from the Redux repos.
+Abaixo há os exemplos portados (até agora) dos repositórios do Redux.
 
-### Counter examples
+### exemplos de contadores
 
-There are three counter examples.
+Há três exemplos de contadores.
 
 #### counter-vanilla
 
-Demo using vanilla JavaScript and UMD builds. All source is inlined in `index.html`.
+Exemplo usando Javascript puro e build UMD. Todo o código está inline no arquivo `index.html`.
 
-To launch the example, just open `index.html` in your browser.
+Para executar o exemplo, basta abrir `index.html` no seu browser.
 
-> Important: your browser must support Generators. Latest versions of Chrome/Firefox/Edge are suitable.
+> Importante: seu browser deve suportar Generators. A última versão do Chrome/Firefox/Edge oferecem suporte.
 
 #### counter
 
-Demo using `webpack` and high-level API `takeEvery`.
+Exemplo usando `webpack` e a API de alto nível `takeEvery`.
 
 ```sh
 $ npm run counter
@@ -189,13 +189,13 @@ $ npm run test-counter
 
 #### cancellable-counter
 
-Demo using low-level API to demonstrate task cancellation.
+Exemplo usando uma API de baixo nível para demonstrar cancelamento de tarefas.
 
 ```sh
 $ npm run cancellable-counter
 ```
 
-### Shopping Cart example
+### exemplo do carrinho de compras
 
 ```sh
 $ npm run shop
@@ -204,7 +204,7 @@ $ npm run shop
 $ npm run test-shop
 ```
 
-### async example
+### exemplo async
 
 ```sh
 $ npm run async
@@ -213,7 +213,7 @@ $ npm run async
 $ npm run test-async
 ```
 
-### real-world example (with webpack hot reloading)
+### exemplo real-world (com webpack hot reloading)
 
 ```sh
 $ npm run real-world
@@ -228,11 +228,11 @@ Check your `tsconfig.json` file, and the official <a href="https://www.typescrip
 
 ### Logo
 
-You can find the official Redux-Saga logo with different flavors in the [logo directory](logo).
+Você pode achar o logo oficial do Redux-Saga com diferentes versões no [diretório de logos](logo).
 
 
-### Backers
-Support us with a monthly donation and help us continue our activities. \[[Become a backer](https://opencollective.com/redux-saga#backer)\]
+### Apoiadores
+Apoie-nos com uma doação mensal e ajude-nos a continuar nossas atividades. \[[Tornar-se um apoiador](https://opencollective.com/redux-saga#backer)\]
 
 <a href="https://opencollective.com/redux-saga/backer/0/website" target="_blank"><img src="https://opencollective.com/redux-saga/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/redux-saga/backer/1/website" target="_blank"><img src="https://opencollective.com/redux-saga/backer/1/avatar.svg"></a>
@@ -266,8 +266,8 @@ Support us with a monthly donation and help us continue our activities. \[[Becom
 <a href="https://opencollective.com/redux-saga/backer/29/website" target="_blank"><img src="https://opencollective.com/redux-saga/backer/29/avatar.svg"></a>
 
 
-### Sponsors
-Become a sponsor and get your logo on our README on Github with a link to your site. \[[Become a sponsor](https://opencollective.com/redux-saga#sponsor)\]
+### Patrocinadores
+Torne-se um patrocinador e obtenha seu logotipo em nosso README no Github com um link para seu site. \[[Tornar-se um patrocinador](https://opencollective.com/redux-saga#sponsor)\]
 
 <a href="https://opencollective.com/redux-saga/sponsor/0/website" target="_blank"><img src="https://opencollective.com/redux-saga/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/redux-saga/sponsor/1/website" target="_blank"><img src="https://opencollective.com/redux-saga/sponsor/1/avatar.svg"></a>
