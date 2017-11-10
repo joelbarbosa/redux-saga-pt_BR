@@ -1,41 +1,41 @@
-# Beginner Tutorial
+# Tutorial para iniciantes
 
-## Objectives of this tutorial
+## Objetivos deste tutorial
 
-This tutorial attempts to introduce redux-saga in a (hopefully) accessible way.
+Este tutorial tenta introduzir o redux-saga de uma maneira (esperamos que) acessível.
 
-For our getting started tutorial, we are going to use the trivial Counter demo from the Redux repo. The application is quite simple but is a good fit to illustrate the basic concepts of redux-saga without being lost in excessive details.
+Para o nosso tutorial inicial, vamos usar a demonstração trivial do Counter do repositório Redux. O aplicativo é bastante simples, mas é um bom exemplo para ilustrar os conceitos básicos de redux-saga sem se perder em detalhes excessivos.
 
-### The initial setup
+### A configuração inicial
 
-Before we start, clone the [tutorial repository](https://github.com/redux-saga/redux-saga-beginner-tutorial).
+Antes de iniciarmos, clone o [repositório tutorial](https://github.com/redux-saga/redux-saga-beginner-tutorial).
 
-> The final code of this tutorial is located in the `sagas` branch.
+> O código final deste tutorial está presente no branch `sagas`.
 
-Then in the command line, run:
+Então na linha de comando, execute:
 
 ```sh
 $ cd redux-saga-beginner-tutorial
 $ npm install
 ```
 
-To start the application, run:
+Para iniciar a aplicação, execute:
 
 ```sh
 $ npm start
 ```
 
-We are starting with the simplest use case: 2 buttons to `Increment` and `Decrement` a counter. Later, we will introduce asynchronous calls.
+Estamos começando com o caso de uso mais simples: 2 botões para `Increment` e `Decrement` um contador. Mais tarde, vamos apresentar chamadas assíncronas.
 
-If things go well, you should see 2 buttons `Increment` and `Decrement` along with a message below showing `Counter: 0`.
+Se as coisas estiverem bem, você deve ver 2 botões `Increment` e `Decrement` junto com uma mensagem abaixo mostrando `Counter: 0`.
 
-> In case you encountered an issue with running the application. Feel free to create an issue on the [tutorial repo](https://github.com/redux-saga/redux-saga-beginner-tutorial/issues).
+> Caso você tenha encontrado algum problema executando a aplicação. Sinta-se livre para criar uma issue no [repositório tutorial](https://github.com/redux-saga/redux-saga-beginner-tutorial/issues).
 
-## Hello Sagas!
+## Olá Sagas!
 
-We are going to create our first Saga. Following the tradition, we will write our 'Hello, world' version for Sagas.
+Nós vamos criar nossa primeira Saga. Seguindo a tradição, nós iremos escrever a nossa própria versão Saga de 'Hello, world'.
 
-Create a file `sagas.js` then add the following snippet:
+Crie um arquivo `sagas.js` e adicione o seguinte trecho:
 
 ```javascript
 export function* helloSaga() {
@@ -43,14 +43,14 @@ export function* helloSaga() {
 }
 ```
 
-So nothing scary, just a normal function (except for the `*`). All it does is print a greeting message into the console.
+Então, nada de assustador, apenas uma função normal (exceto o `*`). Tudo o que faz é imprimir uma mensagem de saudação no console.
 
-In order to run our Saga, we need to:
+Para executar a nossa Saga, precisamos:
 
-- create a Saga middleware with a list of Sagas to run (so far we have only one `helloSaga`)
-- connect the Saga middleware to the Redux store
+- criar um middleware Saga com uma lista de Sagas para executar (até agora temos apenas um `helloSaga`)
+- conectar o middleware Saga com o store do Redux
 
-We will make the changes to `main.js`:
+Vamos fazer as alterações no `main.js`:
 
 ```javascript
 // ...
@@ -72,17 +72,17 @@ const action = type => store.dispatch({type})
 // rest unchanged
 ```
 
-First we import our Saga from the `./sagas` module. Then we create a middleware using the factory function `createSagaMiddleware` exported by the `redux-saga` library.
+Primeiro importamos nossa Saga do módulo `./sagas`. Em seguida, criamos um middleware usando a função `createSagaMiddleware` exportada pela biblioteca `redux-saga`.
 
-Before running our `helloSaga`, we must connect our middleware to the Store using `applyMiddleware`. Then we can use the `sagaMiddleware.run(helloSaga)` to start our Saga.
+Antes de executar nosso `helloSaga`, devemos conectar nosso middleware ao Store usando `applyMiddleware`. Então podemos usar o `sagaMiddleware.run(helloSaga)` para iniciar nossa Saga.
 
-So far, our Saga does nothing special. It just logs a message then exits.
+Até agora, nossa Saga não faz nada de especial. Ela apenas registra uma mensagem e sai.
 
-## Making Asynchronous calls
+## Fazendo chamadas assíncronas
 
-Now let's add something closer to the original Counter demo. To illustrate asynchronous calls, we will add another button to increment the counter 1 second after the click.
+Agora vamos adicionar algo mais perto da demo original do Counter. Para ilustrar chamadas assíncronas, adicionaremos outro botão para incrementar o contador 1 segundo após o clique.
 
-First thing's first, we'll provide an additional button and a callback `onIncrementAsync` to the UI component.
+A primeira coisa que devemos fazer é fornecer um botão adicional e um callback `onIncrementAsync` ao componente UI.
 
 ```javascript
 const Counter = ({ value, onIncrement, onDecrement, onIncrementAsync }) =>
@@ -105,9 +105,9 @@ const Counter = ({ value, onIncrement, onDecrement, onIncrementAsync }) =>
   </div>
 ```
 
-Next we should connect the `onIncrementAsync` of the Component to a Store action.
+Em seguida, devemos conectar o `onIncrementAsync` do componente a uma action do Store.
 
-We will modify the `main.js` module as follows
+Vamos modificar o módulo `main.js` da seguinte forma
 
 ```javascript
 function render() {
@@ -122,15 +122,15 @@ function render() {
 }
 ```
 
-Note that unlike in redux-thunk, our component dispatches a plain object action.
+Note que, ao contrário do redux-thunk, nosso componente envia uma ação de objeto simples.
 
-Now we will introduce another Saga to perform the asynchronous call. Our use case is as follows:
+Agora vamos apresentar outra Saga para executar a chamada assíncrona. Nosso caso de uso é o seguinte:
 
-> On each `INCREMENT_ASYNC` action, we want to start a task that will do the following
+> Em cada ação `INCREMENT_ASYNC`, queremos iniciar uma tarefa que fará o seguinte
 
-> - Wait 1 second then increment the counter
+> - Aguarde 1 segundo e, em seguida, incremente o contador
 
-Add the following code to the `sagas.js` module:
+Adicione o seguinte código ao módulo `sagas.js`:
 
 ```javascript
 import { delay } from 'redux-saga'
@@ -150,11 +150,11 @@ export function* watchIncrementAsync() {
 }
 ```
 
-Time for some explanations.
+Hora de dar algumas explicações.
 
-We import `delay`, a utility function that returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that will resolve after a specified number of milliseconds. We'll use this function to *block* the Generator.
+Nós importamos `delay`, uma função de utilidade que retorna uma [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) que se resolverá após um número especificado de milissegundos. Usaremos esta função para *bloquear* o Generator.
 
-Sagas are implemented as [Generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) that *yield* objects to the redux-saga middleware. The yielded objects are a kind of instruction to be interpreted by the middleware. When a Promise is yielded to the middleware, the middleware will suspend the Saga until the Promise completes. In the above example, the `incrementAsync` Saga is suspended until the Promise returned by `delay` resolves, which will happen after 1 second.
+As sagas são implementadas como [Generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) que *produzem (yield)* objetos para o middleware do redux-saga. Os objetos produzidos (yielded) são um tipo de instrução a ser interpretada pelo middleware. Quando uma Promise é enviada ao middleware, o middleware irá suspender a Saga até que a Promise seja concluída. No exemplo acima, a saga `incrementAsync` é suspensa até que a Promise retornada pelo `delay` se resolva, o que acontecerá após 1 segundo.
 
 Once the Promise is resolved, the middleware will resume the Saga, executing code until the next yield. In this example, the next statement is another yielded object: the result of calling `put({type: 'INCREMENT'})`, which instructs the middleware to dispatch an `INCREMENT` action.
 
