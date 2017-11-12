@@ -152,19 +152,19 @@ export function* watchIncrementAsync() {
 
 Hora de dar algumas explicações.
 
-Nós importamos `delay`, uma função de utilidade que retorna uma [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) que se resolverá após um número especificado de milissegundos. Usaremos esta função para *bloquear* o Generator.
+Nós importamos `delay`, uma função de utilidade que retorna uma [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) que se resolverá após um número especificado de milissegundos. Usaremos esta função para *bloquear* o gerador (Generator).
 
 As sagas são implementadas como [Generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) que *produzem (yield)* objetos para o middleware do redux-saga. Os objetos produzidos (yielded) são um tipo de instrução a ser interpretada pelo middleware. Quando uma Promise é enviada ao middleware, o middleware irá suspender a Saga até que a Promise seja concluída. No exemplo acima, a saga `incrementAsync` é suspensa até que a Promise retornada pelo `delay` se resolva, o que acontecerá após 1 segundo.
 
-Once the Promise is resolved, the middleware will resume the Saga, executing code until the next yield. In this example, the next statement is another yielded object: the result of calling `put({type: 'INCREMENT'})`, which instructs the middleware to dispatch an `INCREMENT` action.
+Uma vez que a Promise for resolvida, o middleware retomará a Saga, executando o código até o próximo yield. Neste exemplo, a próxima declaração é outro objeto produzido (yielded): o resultado de chamar `put({type: 'INCREMENT'})`, que instrui o middleware a enviar a ação `INCREMENT`.
 
-`put` is one example of what we call an *Effect*. Effects are simple JavaScript objects which contain instructions to be fulfilled by the middleware. When a middleware retrieves an Effect yielded by a Saga, the Saga is paused until the Effect is fulfilled.
+`put` é um exemplo do que chamamos de *Efeito*. Os efeitos são simples objetos do JavaScript que contêm instruções para serem cumpridas pelo middleware. Quando um middleware recupera um efeito produzido por uma Saga, a Saga é pausada até que o efeito seja cumprido.
 
-So to summarize, the `incrementAsync` Saga sleeps for 1 second via the call to `delay(1000)`, then dispatches an `INCREMENT` action.
+Então, para resumir, a saga `incrementAsync` pausa por 1 segundo através da chamada do `delay(1000)`, então envia uma ação `INCREMENT`.
 
-Next, we created another Saga `watchIncrementAsync`. We use `takeEvery`, a helper function provided by `redux-saga`, to listen for dispatched `INCREMENT_ASYNC` actions and run `incrementAsync` each time.
+Em seguida, criamos outra Saga `watchIncrementAsync`. Usamos `takeEvery`, uma função auxiliar fornecida pelo `redux-saga`, para escutar as ações `INCREMENT_ASYNC` despachadas e executar `incrementAsync` cada vez.
 
-Now we have 2 Sagas, and we need to start them both at once. To do that, we'll add a `rootSaga` that is responsible for starting our other Sagas. In the same file `sagas.js`, add the following code:
+Agora temos 2 Sagas, e precisamos iniciá-las ambas de uma só vez. Para fazer isso, adicionaremos um `rootSaga` que é responsável por iniciar nossas outras Sagas. No mesmo arquivo `sagas.js`, adicione o seguinte código:
 
 ```javascript
 import { delay } from 'redux-saga'
@@ -181,7 +181,7 @@ export default function* rootSaga() {
 }
 ```
 
-This Saga yields an array with the results of calling our two sagas, `helloSaga` and `watchIncrementAsync`. This means the two resulting Generators will be started in parallel. Now we only have to invoke `sagaMiddleware.run` on the root Saga in `main.js`.
+Esta Saga produz uma matriz com os resultados ao chamar nossas duas sagas, `helloSaga` e `watchIncrementAsync`. Isso significa que os dois geradores (Generators) resultantes serão iniciados em paralelo. Agora, só temos que invocar `sagaMiddleware.run` na Saga raiz em `main.js`.
 
 ```javascript
 // ...
@@ -194,11 +194,11 @@ sagaMiddleware.run(rootSaga)
 // ...
 ```
 
-## Making our code testable
+## Tornando o nosso código testável
 
-We want to test our `incrementAsync` Saga to make sure it performs the desired task.
+Queremos testar a nossa saga `incrementAsync` para certificar-se de que ela executa a tarefa desejada.
 
-Create another file `sagas.spec.js`:
+Crie outro arquivo `sagas.spec.js`:
 
 ```javascript
 import test from 'tape';
@@ -212,23 +212,20 @@ test('incrementAsync Saga test', (assert) => {
 });
 ```
 
-`incrementAsync` is a generator function. When run, it returns an iterator object, and the iterator's `next` method returns an object with the following shape
+`incrementAsync` é a função geradora. Quando executada, irá retornar um objeto iterador e o método `next` do iterador retorna um objeto com a seguinte forma:
 
 ```javascript
 gen.next() // => { done: boolean, value: any }
 ```
 
-The `value` field contains the yielded expression, i.e. the result of the expression after
-the `yield`. The `done` field indicates if the generator has terminated or if there are still
-more 'yield' expressions.
+O campo `value` contém a expressão produzida, isto é, o resultado da expressão após o `yield`. O campo `done` indica se o gerador terminou ou se ainda há mais expressões de 'yield'.
 
-In the case of `incrementAsync`, the generator yields 2 values consecutively:
+No caso de `incrementAsync`, o gerador produz 2 valores consecutivamente:
 
 1. `yield delay(1000)`
 2. `yield put({type: 'INCREMENT'})`
 
-So if we invoke the next method of the generator 3 times consecutively we get the following
-results:
+Então, se invocarmos o próximo método do gerador 3 vezes consecutivamente, obtemos so seguintes resultados:
 
 ```javascript
 gen.next() // => { done: false, value: <result of calling delay(1000)> }
@@ -236,13 +233,12 @@ gen.next() // => { done: false, value: <result of calling put({type: 'INCREMENT'
 gen.next() // => { done: true, value: undefined }
 ```
 
-The first 2 invocations return the results of the yield expressions. On the 3rd invocation
-since there is no more yield the `done` field is set to true. And since the `incrementAsync`
-Generator doesn't return anything (no `return` statement), the `value` field is set to
-`undefined`.
+As primeiras 2 invocações retornam os resultados das expressões de yield. Na 3ª invocação
+uma vez que não há mais yield, o campo `done` está definido como verdadeiro. E como o gerador `incrementAsync`
+não retorna nada (sem declaração `return`), o campo` value` está configurado para `undefined`.
 
-So now, in order to test the logic inside `incrementAsync`, we'll simply have to iterate
-over the returned Generator and check the values yielded by the generator.
+Então, agora, para testar a lógica dentro de `incrementAsync`, simplesmente teremos que iterar
+sobre o gerador (Generator) retornado e verifique os valores gerados pelo gerador.
 
 ```javascript
 import test from 'tape';
@@ -260,11 +256,11 @@ test('incrementAsync Saga test', (assert) => {
 });
 ```
 
-The issue is how do we test the return value of `delay`? We can't do a simple equality test
-on Promises. If `delay` returned a *normal* value, things would've been easier to test.
+A questão é como podemos testar o valor de retorno de `delay`? Não podemos fazer uma simples prova de igualdade
+nas Promises. Se `delay` retornasse um valor *normal*, as coisas teriam sido mais fáceis de testar.
 
-Well, `redux-saga` provides a way to make the above statement possible. Instead of calling
-`delay(1000)` directly inside `incrementAsync`, we'll call it *indirectly*:
+Bem, `redux-saga` fornece uma maneira de tornar possível a declaração acima. Em vez de chamar
+`delay(1000)` diretamente dentro de `incrementAsync`, chamaremos *indiretamente*:
 
 ```javascript
 import { delay } from 'redux-saga'
@@ -279,20 +275,20 @@ export function* incrementAsync() {
 }
 ```
 
-Instead of doing `yield delay(1000)`, we're now doing `yield call(delay, 1000)`. What's the difference?
+Ao invés de executar `yield delay(1000)`, nós agora estamos executando `yield call(delay, 1000)`. Qual a diferença?
 
-In the first case, the yield expression `delay(1000)` is evaluated before it gets passed to the caller of `next` (the caller could be the middleware when running our code. It could also be our test code which runs the Generator function and iterates over the returned Generator). So what the caller gets is a Promise, like in the test code above.
+No primeiro caso, a expressão de rendimento `delay(1000)` é avaliada antes de passar para o caller de `next` (o caller pode ser o middleware ao executar nosso código. Também pode ser o nosso código de teste que executa a função do gerador (Generator) e itera sobre o gerador retornado). Então, o que o caller obtém é a Promise, como no código de teste acima.
 
-In the second case, the yield expression `call(delay, 1000)` is what gets passed to the caller of `next`. `call` just like `put`, returns an Effect which instructs the middleware to call a given function with the given arguments. In fact, neither `put` nor `call` performs any dispatch or asynchronous call by themselves, they simply return plain JavaScript objects.
+No segundo caso, a expressão de yield `call(delay, 1000)` é o que passa para o caller de `next`. `call`, como `put`, retorna um efeito que instrui o middleware a chamar uma determinada função com os argumentos fornecidos. Na verdade, nem `put` nem `call` executam qualquer dispatch ou chamada assíncrona por si só, eles simplesmente retornam objetos simples do JavaScript.
 
 ```javascript
 put({type: 'INCREMENT'}) // => { PUT: {type: 'INCREMENT'} }
 call(delay, 1000)        // => { CALL: {fn: delay, args: [1000]}}
 ```
 
-What happens is that the middleware examines the type of each yielded Effect then decides how to fulfill that Effect. If the Effect type is a `PUT` then it will dispatch an action to the Store. If the Effect is a `CALL` then it'll call the given function.
+O que acontece é que o middleware examina o tipo de cada efeito produzido, em seguida, decide como cumprir esse efeito. Se o tipo de efeito for um `PUT`, ele enviará uma ação para o Store. Se o efeito for um `CALL`, ele chamará a função dada.
 
-This separation between Effect creation and Effect execution makes it possible to test our Generator in a surprisingly easy way:
+Essa separação entre criação de efeitos e execução de efeitos possibilita testar o nosso gerador de forma surpreendentemente fácil:
 
 ```javascript
 import test from 'tape';
@@ -326,12 +322,12 @@ test('incrementAsync Saga test', (assert) => {
 });
 ```
 
-Since `put` and `call` return plain objects, we can reuse the same functions in our test code. And to test the logic of `incrementAsync`, we simply iterate over the generator and do `deepEqual` tests on its values.
+Uma vez que `put` e `call` retornam objetos simples, podemos reutilizar as mesmas funções em nosso código de teste. E para testar a lógica do `incrementAsync`, simplesmente iteramos sobre o gerador e fazemos o testes utlizando a função `deepEqual` em seus valores.
 
-In order to run the above test, run:
+Para executar o teste acima, execute:
 
 ```sh
 $ npm test
 ```
 
-which should report the results on the console.
+que deve reportar os resultados no console.
