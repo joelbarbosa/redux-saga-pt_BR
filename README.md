@@ -24,7 +24,7 @@ Talvez você já tenha usado `redux-thunk` para lidar com sua busca de dados. Co
 ```sh
 $ npm install --save redux-saga
 ```
-or
+ou
 
 ```sh
 $ yarn add redux-saga
