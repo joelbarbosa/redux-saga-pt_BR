@@ -223,8 +223,8 @@ $ npm run real-world
 
 ### TypeScript
 
-Redux-Saga with TypeScript requires `DOM.Iterable` or `ES2015.Iterable`. If your `target` is `ES6`, you are likely already set, however, for `ES5`, you will need to add it yourself.
-Check your `tsconfig.json` file, and the official <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">comiler options</a> documentation.
+Redux-Saga com TypeScript requer `DOM.Iterable` ou `ES2015.Iterable`. Se o seu `target` é `ES6`, provavelmente você não precisa fazer nada, mas para `ES5` você precisará adicionar isso você mesmo.
+Verifique seu `tsconfig.json` e a documentação oficial para <a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">compiler options</a>.
 
 ### Logo
 
