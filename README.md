@@ -113,7 +113,7 @@ sagaMiddleware.run(mySaga)
 # Documentação
 
 - [Introdução](https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html)
-- [Conceitos Básico](https://redux-saga.js.org/docs/basics/index.html)
+- [Conceitos Básicos](https://redux-saga.js.org/docs/basics/index.html)
 - [Conceitos Avançados](https://redux-saga.js.org/docs/advanced/index.html)
 - [Recipes](https://redux-saga.js.org/docs/recipes/index.html)
 - [Recursos Externos](https://redux-saga.js.org/docs/ExternalResources.html)
